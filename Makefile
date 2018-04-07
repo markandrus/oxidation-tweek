@@ -15,8 +15,12 @@ target/debug/librust_c_js.dylib: Cargo.toml src/lib.rs
 target/wasm32-unknown-unknown/debug/rust_c_js.wasm: Cargo.toml src/lib.rs
 	cargo build --target wasm32-unknown-unknown
 
-test: main rust_c_js.js
+test: test-c test-js
+
+test-c: main
 	LD_LIBRARY_PATH=target/debug ./main
+
+test-js: rust_c_js.js
 	node src/main.js
 
-.PHONY: all clean test
+.PHONY: all clean test test-c test-js
