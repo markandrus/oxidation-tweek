@@ -1,29 +1,44 @@
 #![feature(proc_macro, wasm_custom_section, wasm_import_module)]
-// extern crate libc;
+
+#[cfg(not(target_arch = "wasm32"))]
+extern crate libc;
+
+#[cfg(not(target_arch = "wasm32"))]
+use std::ffi::CStr;
+#[cfg(not(target_arch = "wasm32"))]
+use libc::c_char;
+
 #[cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen;
 
-// use std::ffi::CStr;
-// use std::str;
-// use libc::c_char;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-#[no_mangle]
-// pub extern "C" fn count_substrings(value: *const c_char, substr: *const c_char) -> i32 {
-pub extern "C" fn count_substrings() -> i32 {
-    // let c_value = unsafe { CStr::from_ptr(value).to_bytes() };
-    // let c_substr = unsafe { CStr::from_ptr(substr).to_bytes() };
-    // match str::from_utf8(c_value) {
-    //     Ok(value) => match str::from_utf8(c_substr) {
-    //         Ok(substr) => rust_substrings(value, substr),
-    //         Err(_) => -1,
-    //     },
-    //     Err(_) => -1,
-    // }
-    return 0;
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+extern {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
 }
 
-// fn rust_substrings(value: &str, substr: &str) -> i32 {
-//     value.matches(substr).count() as i32
-// }
+#[cfg(not(target_arch = "wasm32"))]
+fn log(str: &str) {
+    println!("{}", str);
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+pub fn greet(name: &str) {
+    do_greet(name);
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+#[no_mangle]
+pub extern "C" fn greet(name: *const c_char) {
+    let c_name = unsafe { CStr::from_ptr(name) };
+    do_greet(c_name.to_str().unwrap());
+}
+
+fn do_greet(name: &str) {
+    log(&format!("Hello, {}!", name));
+}

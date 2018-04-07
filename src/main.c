@@ -1,9 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int32_t count_substrings(const char* value, const char* substr);
+void greet(const char* value);
 
 int main() {
-    printf("%d\n", count_substrings("banana", "na"));
-    return 0;
+    greet("World");
 }
