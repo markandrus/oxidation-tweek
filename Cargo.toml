@@ -5,7 +5,8 @@ authors = ["Mark Andrus Roberts <markandrusroberts@gmail.com>"]
 
 [lib]
 name = "rust_c_js"
-crate-type = ["dylib"]
+crate-type = ["cdylib"]
 
 [dependencies]
 libc = "~0.2"
+wasm-bindgen = "0.2"
