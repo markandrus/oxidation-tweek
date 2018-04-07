@@ -1,42 +1,38 @@
 #![feature(proc_macro, wasm_custom_section, wasm_import_module)]
 
-#[cfg(not(target_arch = "wasm32"))]
-extern crate libc;
+#[macro_use]
+extern crate cfg_if;
 
-#[cfg(not(target_arch = "wasm32"))]
-use std::ffi::CStr;
-#[cfg(not(target_arch = "wasm32"))]
-use libc::c_char;
+cfg_if! {
+    if #[cfg(target_arch = "wasm32")] {
+        extern crate wasm_bindgen;
+        use wasm_bindgen::prelude::*;
 
-#[cfg(target_arch = "wasm32")]
-extern crate wasm_bindgen;
+        #[wasm_bindgen]
+        extern {
+            #[wasm_bindgen(js_namespace = console)]
+            fn log(s: &str);
+        }
 
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
+        #[wasm_bindgen]
+        pub fn greet(name: &str) {
+            do_greet(name);
+        }
+    } else {
+        extern crate libc;
+        use std::ffi::CStr;
+        use libc::c_char;
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen]
-extern {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
+        fn log(str: &str) {
+            println!("{}", str);
+        }
 
-#[cfg(not(target_arch = "wasm32"))]
-fn log(str: &str) {
-    println!("{}", str);
-}
-
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen]
-pub fn greet(name: &str) {
-    do_greet(name);
-}
-
-#[cfg(not(target_arch = "wasm32"))]
-#[no_mangle]
-pub extern "C" fn greet(name: *const c_char) {
-    let c_name = unsafe { CStr::from_ptr(name) };
-    do_greet(c_name.to_str().unwrap());
+        #[no_mangle]
+        pub extern "C" fn greet(name: *const c_char) {
+            let c_name = unsafe { CStr::from_ptr(name) };
+            do_greet(c_name.to_str().unwrap());
+        }
+    }
 }
 
 fn do_greet(name: &str) {
