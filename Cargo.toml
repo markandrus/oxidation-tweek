@@ -1,0 +1,11 @@
+[package]
+name = "rust-c-js"
+version = "0.1.0"
+authors = ["Mark Andrus Roberts <markandrusroberts@gmail.com>"]
+
+[lib]
+name = "rust_c_js"
+crate-type = ["dylib"]
+
+[dependencies]
+libc = "~0.2"
