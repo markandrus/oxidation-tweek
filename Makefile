@@ -1,6 +1,8 @@
 # Variables
 # =========
 
+NAME = rust_c_js
+
 # Default to debug mode
 ifneq ($(BUILD),release)
 	BUILD = debug
@@ -20,41 +22,41 @@ C_OUT_MAIN = $(C_OUT_DIR)/main
 JS_OUT_DIR = $(OUT_DIR)/js
 JS_OUT_MAIN = $(JS_OUT_DIR)/main
 JS_OUT_LIB_DIR = $(JS_OUT_DIR)/lib
-JS_OUT_LIB_JS = $(JS_OUT_LIB_DIR)/rust_c_js.js
-JS_OUT_LIB_JS_BG = $(JS_OUT_LIB_DIR)/rust_c_js_bg.js
-JS_OUT_LIB_WASM_BG = $(JS_OUT_LIB_DIR)/rust_c_js_bg.wasm
+JS_OUT_LIB_JS = $(JS_OUT_LIB_DIR)/$(NAME).js
+JS_OUT_LIB_JS_BG = $(JS_OUT_LIB_DIR)/$(NAME)_bg.js
+JS_OUT_LIB_WASM_BG = $(JS_OUT_LIB_DIR)/$(NAME)_bg.wasm
 
 # WebAssembly build artifacts
 WASM_OUT_DIR = $(OUT_DIR)/wasm
-WASM_OUT_LIB = $(WASM_OUT_DIR)/rust_c_js.wasm
+WASM_OUT_LIB = $(WASM_OUT_DIR)/$(NAME).wasm
 
 # Optimized WebAssembly build artifacts
 WASM_OPT_OUT_DIR = $(OUT_DIR)/wasm-opt
-WASM_OPT_OUT_LIB = $(WASM_OPT_OUT_DIR)/rust_c_js.wasm
-WASM_OPT_OUT_LIB_GC = $(WASM_OPT_OUT_DIR)/rust_c_js_gc.wasm
+WASM_OPT_OUT_LIB = $(WASM_OPT_OUT_DIR)/$(NAME).wasm
+WASM_OPT_OUT_LIB_GC = $(WASM_OPT_OUT_DIR)/$(NAME)_gc.wasm
 
 # wasm-bindgen build artifacts
 WASM_BINDGEN_OUT_DIR = $(OUT_DIR)/wasm-bindgen
-WASM_BINDGEN_OUT_JS = $(WASM_BINDGEN_OUT_DIR)/rust_c_js.js
-WASM_BINDGEN_OUT_JS_BG = $(WASM_BINDGEN_OUT_DIR)/rust_c_js_bg.js
-WASM_BINDGEN_OUT_WASM_BG = $(WASM_BINDGEN_OUT_DIR)/rust_c_js_bg.wasm
+WASM_BINDGEN_OUT_JS = $(WASM_BINDGEN_OUT_DIR)/$(NAME).js
+WASM_BINDGEN_OUT_JS_BG = $(WASM_BINDGEN_OUT_DIR)/$(NAME)_bg.js
+WASM_BINDGEN_OUT_WASM_BG = $(WASM_BINDGEN_OUT_DIR)/$(NAME)_bg.wasm
 
 # Optimized wasm-bindgen build artifacts
 WASM_BINDGEN_OPT_OUT_DIR = $(OUT_DIR)/wasm-bindgen-opt
-WASM_BINDGEN_OPT_OUT_JS = $(WASM_BINDGEN_OPT_OUT_DIR)/rust_c_js.js
-WASM_BINDGEN_OPT_OUT_JS_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/rust_c_js_bg.js
-WASM_BINDGEN_OPT_OUT_WASM_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/rust_c_js_bg.wasm
+WASM_BINDGEN_OPT_OUT_JS = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME).js
+WASM_BINDGEN_OPT_OUT_JS_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.js
+WASM_BINDGEN_OPT_OUT_WASM_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.wasm
 
 # Rust build artifacts
 RUST_TARGET_DIR = rust/target
 
 # Rust C build artifacts
 RUST_C_LIB_DIR = $(RUST_TARGET_DIR)/$(BUILD)
-RUST_C_LIB = $(RUST_C_LIB_DIR)/librust_c_js.dylib
+RUST_C_LIB = $(RUST_C_LIB_DIR)/lib$(NAME).dylib
 
 # Rust WebAssembly build artifacts
 RUST_WASM_LIB_DIR = $(RUST_TARGET_DIR)/wasm32-unknown-unknown/$(BUILD)
-RUST_WASM_LIB = $(RUST_WASM_LIB_DIR)/rust_c_js.wasm
+RUST_WASM_LIB = $(RUST_WASM_LIB_DIR)/$(NAME).wasm
 
 UGLIFYJS = ./node_modules/.bin/uglifyjs
 
@@ -91,7 +93,7 @@ test-js: $(JS_OUT_MAIN) ## Run the JavaScript test application (defaults to debu
 # ------------------
 
 $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB)
-	mkdir -p $(C_OUT_DIR) && $(CC) $(CFLAGS) $< -L $(RUST_C_LIB_DIR) -lrust_c_js -o $@
+	mkdir -p $(C_OUT_DIR) && $(CC) $(CFLAGS) $< -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
 
 # JavaScript Test Application
 # ---------------------------
@@ -158,7 +160,7 @@ else
 $(WASM_BINDGEN_OUT_JS): $(WASM_OPT_OUT_LIB)
 endif
 	mkdir -p $(WASM_BINDGEN_OUT_DIR) && wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR)
-	cd $(WASM_BINDGEN_OUT_DIR) && patch -p0 <../../../js/rust_c_js_bg.js.patch
+	cd $(WASM_BINDGEN_OUT_DIR) && patch -p0 <../../../js/$(NAME)_bg.js.patch
 
 # Optimized wasm-bindgen Library
 # ------------------------------
