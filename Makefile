@@ -3,8 +3,8 @@ all: test
 clean:
 	rm -rf main rust_c_js.js rust_c_js_bg.js rust_c_js_bg.wasm rust/target
 
-main: src/main.c rust/target/debug/librust_c_js.dylib
-	gcc src/main.c -L rust/target/debug -lrust_c_js -o main
+main: c/src/main.c rust/target/debug/librust_c_js.dylib
+	gcc c/src/main.c -L rust/target/debug -lrust_c_js -o main
 
 rust_c_js.js: rust/target/wasm32-unknown-unknown/debug/rust_c_js.wasm
 	wasm-bindgen rust/target/wasm32-unknown-unknown/debug/rust_c_js.wasm --nodejs --out-dir .
