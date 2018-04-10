@@ -8,6 +8,7 @@ build/main: c/src/main.c rust/target/debug/librust_c_js.dylib
 
 js/lib/rust_c_js.js: rust/target/wasm32-unknown-unknown/debug/rust_c_js.wasm
 	mkdir -p js/lib && wasm-bindgen rust/target/wasm32-unknown-unknown/debug/rust_c_js.wasm --nodejs --out-dir js/lib
+	cd js && patch -p0 <rust_c_js_bg.js.patch
 
 rust/target/debug/librust_c_js.dylib: rust/Cargo.toml rust/src/lib.rs
 	cd rust && cargo build

@@ -1,0 +1,15 @@
+--- lib/rust_c_js_bg.js
++++ lib/rust_c_js_bg.js
+@@ -1,8 +1,9 @@
+ let imports = {};
+ imports['./rust_c_js'] = require('./rust_c_js');
+ 
+-            const bytes = require('fs').readFileSync('rust_c_js_bg.wasm');
++            const join = require('path').join;
++            const bytes = require('fs').readFileSync(join(__dirname, 'rust_c_js_bg.wasm'));
+             const wasmModule = new WebAssembly.Module(bytes);
+             const wasmInstance = new WebAssembly.Instance(wasmModule, imports);
+             module.exports = wasmInstance.exports;
+-        
+\ No newline at end of file
++        
