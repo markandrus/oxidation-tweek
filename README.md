@@ -13,6 +13,7 @@ Installation
 ### Requirements
 
 * Cargo
+* cbindgen
 * gcc
 * make
 * Node.js (8 or newer)

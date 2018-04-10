@@ -53,6 +53,7 @@ RUST_TARGET_DIR = rust/target
 # Rust C build artifacts
 RUST_C_LIB_DIR = $(RUST_TARGET_DIR)/$(BUILD)
 RUST_C_LIB = $(RUST_C_LIB_DIR)/lib$(NAME).dylib
+RUST_C_HEADER = c/src/rust.h
 
 # Rust WebAssembly build artifacts
 RUST_WASM_LIB_DIR = $(RUST_TARGET_DIR)/wasm32-unknown-unknown/$(BUILD)
@@ -70,7 +71,7 @@ UGLIFYJS = ./node_modules/.bin/uglifyjs
 all: test ## Build and test everything (defaults to debug mode)
 
 clean: ## Clean everything (both release and debug artifacts)
-	rm -rf build rust/target
+	rm -rf build $(RUST_C_HEADER) rust/target
 
 debug: ## Build and test everything (debug mode)
 	$(MAKE) BUILD=$@ all
@@ -92,9 +93,9 @@ test-js: $(JS_OUT_MAIN) ## Run the JavaScript test application (defaults to debu
 # C Test Application
 # ------------------
 
-$(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB)
+$(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB) $(RUST_C_HEADER) rust/cbindgen.toml
 	mkdir -p $(C_OUT_DIR)
-	$(CC) $(CFLAGS) $< -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
+	$(CC) $(CFLAGS) $< -I c -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
 
 # JavaScript Test Application
 # ---------------------------
@@ -132,6 +133,9 @@ endif
 
 $(RUST_C_LIB): rust/Cargo.toml rust/src/lib.rs
 	cd rust && cargo build $(CARGO_FLAGS)
+
+$(RUST_C_HEADER): rust/src/lib.rs
+	cbindgen rust -o $@
 
 # Rust WebAssembly Library
 # ------------------------

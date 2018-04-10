@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-void greet(const char* value);
+#include "src/rust.h"
 
 int main() {
     greet("World");

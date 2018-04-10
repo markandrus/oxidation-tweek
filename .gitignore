@@ -1,4 +1,5 @@
 /build
+/c/src/rust.h
 /js/lib
 /main
 /node_modules
