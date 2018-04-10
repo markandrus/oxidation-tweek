@@ -1,5 +1,7 @@
 #![feature(proc_macro, wasm_custom_section, wasm_import_module)]
 
+mod util;
+
 #[macro_use]
 extern crate cfg_if;
 
@@ -21,10 +23,6 @@ cfg_if! {
 
         fn to_out_str(output: String) -> OutStr {
             return CString::new(output).unwrap().into_raw();
-        }
-
-        fn log(str: &str) {
-            println!("{}", str);
         }
     } else {
         extern crate wasm_bindgen;
@@ -49,26 +47,14 @@ type InStr = *const c_char;
 #[cfg(not(target_arch = "wasm32"))]
 type OutStr = *mut c_char;
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen]
-extern {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
 #[cfg(not(target_arch = "wasm32"))]
 #[no_mangle]
 pub extern "C" fn greet(name: InStr) -> OutStr {
-    to_out_str(do_greet(from_in_str(name)))
+    to_out_str(util::do_greet(from_in_str(name)))
 }
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub fn greet(name: InStr) -> OutStr {
-    to_out_str(do_greet(from_in_str(name)))
-}
-
-fn do_greet(name: String) -> String {
-    log(&format!("Hello, {}!", name));
-    String::from("Bye!")
+    to_out_str(util::do_greet(from_in_str(name)))
 }

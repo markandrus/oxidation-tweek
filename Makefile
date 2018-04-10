@@ -48,7 +48,7 @@ WASM_BINDGEN_OPT_OUT_JS_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.js
 WASM_BINDGEN_OPT_OUT_WASM_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.wasm
 
 # Rust sources
-RUST_SRC = rust/src/lib.rs
+RUST_SRC = rust/src/lib.rs rust/src/util.rs
 
 # Rust build artifacts
 RUST_TARGET_DIR = rust/target
