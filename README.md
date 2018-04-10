@@ -21,18 +21,13 @@ Installation
 
 ### Usage
 
-Run `make test-c` and/or `make test-js`. These call out to
-
-```sh
-LD_LIBRARY_PATH=target/debug ./main
-```
-
-and
-
-```sh
-node src/index.js
-```
-
-respectively. You should see each print
+Run `make all` to build and run both the C and JavaScript test applications. You
+should see each print
 
 > Hello, World!
+
+#### Release Mode
+
+You can build in release mode with `make release`. This passes `--release` to
+Cargo, transforms the generated WebAssembly with `wasm-gc` and `wasm-opt`, and
+minifies the generated JavaScript.
