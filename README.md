@@ -18,6 +18,8 @@ Installation
 * Node.js (8 or newer)
 * Rust Nightly
 * wasm-bindgen
+* wasm-gc
+* wasm-opt
 
 ### Usage
 
