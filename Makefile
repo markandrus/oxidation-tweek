@@ -47,6 +47,9 @@ WASM_BINDGEN_OPT_OUT_JS = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME).js
 WASM_BINDGEN_OPT_OUT_JS_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.js
 WASM_BINDGEN_OPT_OUT_WASM_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.wasm
 
+# Rust sources
+RUST_SRC = rust/src/lib.rs
+
 # Rust build artifacts
 RUST_TARGET_DIR = rust/target
 
@@ -131,16 +134,16 @@ endif
 # Rust C Library
 # --------------
 
-$(RUST_C_LIB): rust/Cargo.toml rust/src/lib.rs
+$(RUST_C_LIB): rust/Cargo.toml $(RUST_SRC)
 	cd rust && cargo build $(CARGO_FLAGS)
 
-$(RUST_C_HEADER): rust/Cargo.toml rust/src/lib.rs rust/cbindgen.toml
+$(RUST_C_HEADER): rust/Cargo.toml $(RUST_SRC) rust/cbindgen.toml
 	cbindgen rust -o $@
 
 # Rust WebAssembly Library
 # ------------------------
 
-$(RUST_WASM_LIB): rust/Cargo.toml rust/src/lib.rs
+$(RUST_WASM_LIB): rust/Cargo.toml $(RUST_SRC)
 	cd rust && cargo build --target wasm32-unknown-unknown $(CARGO_FLAGS)
 
 # Optimized Rust WebAssembly Library
