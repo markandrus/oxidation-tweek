@@ -93,13 +93,15 @@ test-js: $(JS_OUT_MAIN) ## Run the JavaScript test application (defaults to debu
 # ------------------
 
 $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB)
-	mkdir -p $(C_OUT_DIR) && $(CC) $(CFLAGS) $< -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
+	mkdir -p $(C_OUT_DIR)
+	$(CC) $(CFLAGS) $< -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
 
 # JavaScript Test Application
 # ---------------------------
 
 $(JS_OUT_MAIN): js/index.js $(JS_OUT_LIB_JS) $(JS_OUT_LIB_JS_BG) $(JS_OUT_LIB_WASM_BG)
-	mkdir -p $(JS_OUT_DIR) && cp $< $@
+	mkdir -p $(JS_OUT_DIR)
+	cp $< $@
 
 ifeq ($(BUILD),debug)
 $(JS_OUT_LIB_JS): $(WASM_BINDGEN_OUT_JS)
@@ -159,7 +161,8 @@ $(WASM_BINDGEN_OUT_JS): $(WASM_OUT_LIB)
 else
 $(WASM_BINDGEN_OUT_JS): $(WASM_OPT_OUT_LIB)
 endif
-	mkdir -p $(WASM_BINDGEN_OUT_DIR) && wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR)
+	mkdir -p $(WASM_BINDGEN_OUT_DIR)
+	wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR)
 	cd $(WASM_BINDGEN_OUT_DIR) && patch -p0 <../../../js/$(NAME)_bg.js.patch
 
 # Optimized wasm-bindgen Library
