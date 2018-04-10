@@ -1,2 +1,2 @@
-const { greet } = require('../rust_c_js');
+const { greet } = require('./lib/rust_c_js');
 greet('World');
