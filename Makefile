@@ -21,6 +21,6 @@ test-c: main
 	LD_LIBRARY_PATH=rust/target/debug ./main
 
 test-js: rust_c_js.js
-	node src/main.js
+	node js/index.js
 
 .PHONY: all clean test test-c test-js

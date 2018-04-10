@@ -30,7 +30,7 @@ LD_LIBRARY_PATH=target/debug ./main
 and
 
 ```sh
-node src/main.js
+node src/index.js
 ```
 
 respectively. You should see each print
