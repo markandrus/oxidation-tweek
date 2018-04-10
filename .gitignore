@@ -1,6 +1,6 @@
-/Cargo.lock
 /main
+/rust/Cargo.lock
+/rust/target
 /rust_c_js.js
 /rust_c_js_bg.js
 /rust_c_js_bg.wasm
-/target
