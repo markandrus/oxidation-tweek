@@ -1,5 +1,6 @@
 /build
 /js/lib
 /main
+/node_modules
 /rust/Cargo.lock
 /rust/target

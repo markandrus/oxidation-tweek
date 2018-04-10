@@ -1,5 +1,5 @@
---- lib/rust_c_js_bg.js
-+++ lib/rust_c_js_bg.js
+--- rust_c_js_bg.js
++++ rust_c_js_bg.js
 @@ -1,8 +1,9 @@
  let imports = {};
  imports['./rust_c_js'] = require('./rust_c_js');
