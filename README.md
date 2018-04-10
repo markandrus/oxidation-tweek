@@ -28,6 +28,7 @@ Run `make all` to build and run both the C and JavaScript test applications. You
 should see each print
 
 > Hello, World!
+> Bye!
 
 #### Release Mode
 

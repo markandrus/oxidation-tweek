@@ -134,7 +134,7 @@ endif
 $(RUST_C_LIB): rust/Cargo.toml rust/src/lib.rs
 	cd rust && cargo build $(CARGO_FLAGS)
 
-$(RUST_C_HEADER): rust/src/lib.rs
+$(RUST_C_HEADER): rust/Cargo.toml rust/src/lib.rs rust/cbindgen.toml
 	cbindgen rust -o $@
 
 # Rust WebAssembly Library
