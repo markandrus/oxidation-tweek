@@ -20,6 +20,7 @@ matrix:
     #     set -e
     #     rustup target add wasm32-unknown-unknown
     #     rustup target add x86_64-unknown-linux-musl
+    #     set +e
     #   script: PATH=binaryen-$BINARYEN/bin:$PATH TARGET=x86_64-unknown-linux-musl make test
 
     # WebAssembly
@@ -70,6 +71,8 @@ before_script:
     cargo install cbindgen --force
   fi
 
+  set +e
+
 install:
 - |
   set -e
@@ -79,6 +82,8 @@ install:
     source ~/.nvm/nvm.sh
     nvm install 9
   fi
+
+  set +e
 
 before_deploy:
 - |
@@ -95,6 +100,8 @@ before_deploy:
   fi
 
   tar czvf $name.tar.gz $name
+
+  set +e
 
 deploy:
   api_key:
