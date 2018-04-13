@@ -19,10 +19,10 @@ _should_ find a way to re-use code, if not in this particular way.
 Status
 ------
 
-For now, this project reimplements SDP functionality from
+For now, this project reimplements some SDP functionality common to
 
-* [lib/util/sdp/index.js](https://github.com/twilio/twilio-video.js/blob/1.8.0/lib/util/sdp/index.js), and
-* [src/media/sdp_utils.cpp](https://github.com/twilio/video-cpp/blob/f83ff580baee7e80070c0e617cd231e636630a3e/src/media/sdp_utils.cpp),
+* [lib/util/sdp/index.js](https://github.com/twilio/twilio-video.js/blob/1.8.0/lib/util/sdp/index.js)
+* [src/media/sdp_utils.cpp](https://github.com/twilio/video-cpp/blob/f83ff580baee7e80070c0e617cd231e636630a3e/src/media/sdp_utils.cpp)
 
 mainly because the types of these functions are typically string → string and
 easy to provide bindings to; however, in the future, as cbindgen and
