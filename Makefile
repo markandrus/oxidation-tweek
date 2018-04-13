@@ -126,7 +126,7 @@ test-rust: ## Run the Rust unit tests
 $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB) $(RUST_C_HEADER) rust/cbindgen.toml
 	$(call echo, "Building C test application")
 	mkdir -p $(C_OUT_DIR)
-	$(CC) $(CFLAGS) $< -I c -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
+	$(CC) $(CFLAGS) $< -I c -l$(RUST_C_LIB) -o $@
 
 # JavaScript Test Application
 # ---------------------------
