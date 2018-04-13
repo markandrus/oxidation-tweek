@@ -72,7 +72,7 @@ RUST_C_LIB_DIR = $(RUST_TARGET_DIR)/$(BUILD)
 else
 RUST_C_LIB_DIR = $(RUST_TARGET_DIR)/$(TARGET)/$(BUILD)
 endif
-RUST_C_LIB = $(RUST_C_LIB_DIR)/lib$(NAME).dylib
+RUST_C_LIB = $(RUST_C_LIB_DIR)/lib$(NAME).a
 RUST_C_HEADER = c/src/$(NAME).h
 
 # Rust WebAssembly build artifacts
@@ -110,7 +110,7 @@ test: test-c test-js ## Run both the C and JavaScript test applications (default
 
 test-c: $(C_OUT_MAIN) ## Run the C test application (defaults to debug mode)
 	$(call echo, "Running C test application")
-	LD_LIBRARY_PATH=$(RUST_C_LIB_DIR) $<
+	$<
 
 test-js: $(JS_OUT_MAIN) ## Run the JavaScript test application (defaults to debug mode)
 	$(call echo, "Running JavaScript test application")

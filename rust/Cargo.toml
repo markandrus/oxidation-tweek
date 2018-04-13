@@ -5,7 +5,7 @@ authors = ["Mark Andrus Roberts <markandrusroberts@gmail.com>"]
 
 [lib]
 name = "oxidation_tweek"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
 cfg-if = "0.1"

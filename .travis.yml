@@ -1,6 +1,10 @@
 language: rust
 sudo: false
 
+cache:
+  - $HOME/.cargo
+  - $TRAVIS_BUILD_DIR/rust/target
+
 env:
   global:
     - BINARYEN=1.37.36
