@@ -51,8 +51,8 @@ before_script:
     if [ "$BUILD" == release ]; then
       cargo install wasm-gc
 
-      curl -O https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN/binaryen-$BINARYEN-x86-linux.tar.gz
-      tar -x binaryen-*.tar.gz
+      curl -OL https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN/binaryen-$BINARYEN-x86-linux.tar.gz
+      tar -xvf binaryen-*.tar.gz
     else
       cargo install cbindgen
     fi
