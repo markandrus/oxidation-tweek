@@ -1,10 +1,10 @@
 [package]
-name = "rust-c-js"
+name = "oxidation-tweek"
 version = "0.1.0"
 authors = ["Mark Andrus Roberts <markandrusroberts@gmail.com>"]
 
 [lib]
-name = "rust_c_js"
+name = "oxidation_tweek"
 crate-type = ["cdylib"]
 
 [dependencies]

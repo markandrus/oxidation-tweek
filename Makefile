@@ -1,14 +1,18 @@
 # Variables
 # =========
 
-NAME = rust_c_js
+NAME = oxidation_tweek
 
 # Default to debug mode
 ifneq ($(BUILD),release)
 	BUILD = debug
-	CFLAGS = "-g"
+	CFLAGS = -g
 else
-	CARGO_FLAGS = "--release"
+	CARGO_FLAGS = --release
+endif
+
+ifneq ($(TARGET),)
+	CARGO_TARGET = --target $(TARGET)
 endif
 
 define echo
@@ -157,7 +161,7 @@ endif
 
 $(RUST_C_LIB): rust/Cargo.toml $(RUST_SRC) $(RUST_LINTED) $(RUST_TESTED)
 	$(call echo, "Building Rust C library")
-	cd rust && cargo build $(CARGO_FLAGS)
+	cd rust && cargo build $(CARGO_TARGET) $(CARGO_FLAGS)
 
 $(RUST_C_HEADER): rust/Cargo.toml $(RUST_SRC) rust/cbindgen.toml
 	$(call echo, "Generating Rust C library headers")
