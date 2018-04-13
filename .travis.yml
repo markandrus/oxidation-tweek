@@ -46,13 +46,13 @@ before_script:
 - |
   set -e
 
-  cargo +nightly install clippy
+  cargo +nightly install clippy --force
 
   if [ -z "$TARGET" ] || [ "$TARGET" == wasm32-unknown-unknown ]; then
-    cargo install wasm-bindgen-cli
+    cargo install wasm-bindgen-cli --force
 
     if [ "$BUILD" == release ]; then
-      cargo install wasm-gc
+      cargo install wasm-gc --force
 
       if [ ! -f binaryen-$BINARYEN/bin/wasm-opt ]; then
         rm -rf binaryen-$BINARYEN
@@ -64,10 +64,10 @@ before_script:
         cd ..
       fi
     else
-      cargo install cbindgen
+      cargo install cbindgen --force
     fi
   else
-    cargo install cbindgen
+    cargo install cbindgen --force
   fi
 
 install:
