@@ -13,7 +13,10 @@ matrix:
   include:
     # Test
     - rust: nightly
-      before_install: rustup target add wasm32-unknown-unknown
+      before_install: |
+        set -e
+        rustup target add wasm32-unknown-unknown
+        rustup target add x86_64-unknown-linux-musl
       script: TARGET=x86_64-unknown-linux-musl make test
 
     # WebAssembly
