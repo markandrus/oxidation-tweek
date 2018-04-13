@@ -5,6 +5,8 @@ mod util;
 #[macro_use]
 extern crate cfg_if;
 
+extern crate regex;
+
 cfg_if! {
     if #[cfg(not(target_arch = "wasm32"))] {
         extern crate libc;
@@ -18,11 +20,11 @@ cfg_if! {
 
         fn from_in_str(input: InStr) -> String {
             let c_input = unsafe { CStr::from_ptr(input) };
-            return c_input.to_str().unwrap().to_owned();
+            c_input.to_str().unwrap().to_owned()
         }
 
         fn to_out_str(output: String) -> OutStr {
-            return CString::new(output).unwrap().into_raw();
+            CString::new(output).unwrap().into_raw()
         }
     } else {
         extern crate wasm_bindgen;
@@ -50,11 +52,11 @@ type OutStr = *mut c_char;
 #[cfg(not(target_arch = "wasm32"))]
 #[no_mangle]
 pub extern "C" fn greet(name: InStr) -> OutStr {
-    to_out_str(util::do_greet(from_in_str(name)))
+    to_out_str(util::do_greet(&from_in_str(name)))
 }
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub fn greet(name: InStr) -> OutStr {
-    to_out_str(util::do_greet(from_in_str(name)))
+    to_out_str(util::do_greet(&from_in_str(name)))
 }

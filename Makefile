@@ -11,6 +11,12 @@ else
 	CARGO_FLAGS = "--release"
 endif
 
+define echo
+	@tput setaf 6
+	@echo $1
+	@tput sgr0
+endef
+
 # Build artifacts
 OUT_DIR = build/$(BUILD)
 
@@ -50,6 +56,9 @@ WASM_BINDGEN_OPT_OUT_WASM_BG = $(WASM_BINDGEN_OPT_OUT_DIR)/$(NAME)_bg.wasm
 # Rust sources
 RUST_SRC = rust/src/lib.rs rust/src/util.rs
 
+RUST_LINTED = .rust-linted
+RUST_TESTED = .rust-tested
+
 # Rust build artifacts
 RUST_TARGET_DIR = rust/target
 
@@ -69,12 +78,12 @@ UGLIFYJS = ./node_modules/.bin/uglifyjs
 
 .DEFAULT_GOAL = help
 
-.PHONY: all clean debug help release test test-c test-js
+.PHONY: all clean debug help lint-rust release test test-c test-js test-rust
 
 all: test ## Build and test everything (defaults to debug mode)
 
 clean: ## Clean everything (both release and debug artifacts)
-	rm -rf build $(RUST_C_HEADER) rust/target
+	rm -rf build $(RUST_C_HEADER) $(RUST_LINTED) $(RUST_TESTED) $(RUST_TARGET_DIR)
 
 debug: ## Build and test everything (debug mode)
 	$(MAKE) BUILD=$@ all
@@ -82,21 +91,31 @@ debug: ## Build and test everything (debug mode)
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+lint-rust:  ## Lint the Rust source (runs Clippy)
+	cd rust && cargo +nightly clippy
+
 release: ## Build and test everything (release mode)
 	$(MAKE) BUILD=$@ all
 
 test: test-c test-js ## Run both the C and JavaScript test applications (defaults to debug mode)
 
 test-c: $(C_OUT_MAIN) ## Run the C test application (defaults to debug mode)
+	$(call echo, "Running C test application")
 	LD_LIBRARY_PATH=$(RUST_C_LIB_DIR) $<
 
 test-js: $(JS_OUT_MAIN) ## Run the JavaScript test application (defaults to debug mode)
+	$(call echo, "Running JavaScript test application")
 	node $<
+
+test-rust: ## Run the Rust unit tests
+	$(call echo, "Running Rust unit tests")
+	cd rust && cargo test
 
 # C Test Application
 # ------------------
 
 $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB) $(RUST_C_HEADER) rust/cbindgen.toml
+	$(call echo, "Building C test application")
 	mkdir -p $(C_OUT_DIR)
 	$(CC) $(CFLAGS) $< -I c -L $(RUST_C_LIB_DIR) -l$(NAME) -o $@
 
@@ -104,6 +123,7 @@ $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB) $(RUST_C_HEADER) rust/cbindgen.toml
 # ---------------------------
 
 $(JS_OUT_MAIN): js/index.js $(JS_OUT_LIB_JS) $(JS_OUT_LIB_JS_BG) $(JS_OUT_LIB_WASM_BG)
+	$(call echo, "Building JavaScript test application")
 	mkdir -p $(JS_OUT_DIR)
 	cp $< $@
 
@@ -134,16 +154,27 @@ endif
 # Rust C Library
 # --------------
 
-$(RUST_C_LIB): rust/Cargo.toml $(RUST_SRC)
+$(RUST_C_LIB): rust/Cargo.toml $(RUST_SRC) $(RUST_LINTED) $(RUST_TESTED)
+	$(call echo, "Building Rust C library")
 	cd rust && cargo build $(CARGO_FLAGS)
 
 $(RUST_C_HEADER): rust/Cargo.toml $(RUST_SRC) rust/cbindgen.toml
+	$(call echo, "Generating Rust C library headers")
 	cbindgen rust -o $@
+
+$(RUST_LINTED): rust/Cargo.toml $(RUST_SRC)
+	make lint-rust
+	touch $(RUST_LINTED)
+
+$(RUST_TESTED): rust/Cargo.toml $(RUST_SRC)
+	make test-rust
+	touch $(RUST_TESTED)
 
 # Rust WebAssembly Library
 # ------------------------
 
 $(RUST_WASM_LIB): rust/Cargo.toml $(RUST_SRC)
+	$(call echo, "Building Rust WebAssembly library")
 	cd rust && cargo build --target wasm32-unknown-unknown $(CARGO_FLAGS)
 
 # Optimized Rust WebAssembly Library
@@ -154,10 +185,12 @@ $(WASM_OUT_LIB): $(RUST_WASM_LIB)
 	cp $< $@
 
 $(WASM_OPT_OUT_LIB_GC): $(WASM_OUT_LIB)
+	$(call echo, "Running wasm-gc over Rust WebAssembly library")
 	mkdir -p $(WASM_OPT_OUT_DIR)
 	wasm-gc $< $@
 
 $(WASM_OPT_OUT_LIB): $(WASM_OPT_OUT_LIB_GC)
+	$(call echo, "Running wasm-opt over Rust WebAssembly library")
 	wasm-opt $< -Os -o $@
 
 # wasm-bindgen Library
@@ -168,6 +201,7 @@ $(WASM_BINDGEN_OUT_JS): $(WASM_OUT_LIB)
 else
 $(WASM_BINDGEN_OUT_JS): $(WASM_OPT_OUT_LIB)
 endif
+	$(call echo, "Running wasm-bindgen over Rust WebAssembly library")
 	mkdir -p $(WASM_BINDGEN_OUT_DIR)
 	wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR)
 	cd $(WASM_BINDGEN_OUT_DIR) && patch -p0 <../../../js/$(NAME)_bg.js.patch
@@ -176,6 +210,7 @@ endif
 # ------------------------------
 
 $(WASM_BINDGEN_OPT_OUT_JS): $(WASM_BINDGEN_OUT_JS) $(UGLIFYJS)
+	$(call echo, "Minifying wasm-bindgen JavaScript library")
 	mkdir -p $(WASM_BINDGEN_OPT_OUT_DIR)
 	$(UGLIFYJS) $< --compress -o $@
 
@@ -191,5 +226,6 @@ $(WASM_BINDGEN_OPT_OUT_WASM_BG): $(WASM_BINDGEN_OUT_WASM_BG)
 # --------
 
 $(UGLIFYJS): package.json
+	$(call echo, "Installing uglify-js")
 	npm install
 	touch $(UGLIFYJS)
