@@ -96,11 +96,12 @@ before_deploy:
 
 deploy:
   api_key:
-    secure: TODO
+    secure: q/Pa3X/behSaqzBbEtTaNmkSlUUnvHizOeugIvy02hs1Z3DGo6iK7akXjMLJf9VNXY2FrMzgMoaYJeOYYLzf33dY7udxiQer2thdc9gF2VaPbMv1dYGXB7q0UrHo9vd7GCWtH3bOnq/nLuu/+2CGx80bgEx7BJwJEJPBvObLgO2BI7RXiaHUgYaUXIKRymVvy4Zo/GwUQhUbMhuF+nla+mMgqKiZCDTjV3h0P+dE23kJSfUzsNmBhSD7WNAbzXS53Ny/MXyK/73DjtKvZymOVlCNDLSVHgvjb2v0jozglqCnttd0KypjpHavNYhVVx7cGPG103dgPH4aCULG4qCo+nH2DJ1X6xs7BsZLs+nlbkhSV5t6PZm6smqTklUklX3dMPFBXbQurNMErYKZOaUVtVJtdn4As0PoRxn0hUbY+wPJlnTsoVMW7WsykvoGUImXzJXQBHCMkCxzNcDmA80sYrKqN/owuAx1zneM0xnaQ0YmsYYG9MVgmsFjzucPNu5P3uE4zTplnJd7n07DyawDrl7g+kbHyJ8V2l/Zxn1NBknXSQGzU3r5jTF5yxI/dkzqkizc+jglHgOtD7TdxRlS3xdvpx4EMznIgEqMzLQFu/ihwZZDb5GhpRzg7PJcvunMAWmqqQ3otSBnQCawm8G4R49mDh1KT/bCi9S5O0Q/e44=
   file_glob: true
   file:
     - $name.tar.gz
   on:
     tags: true
   provider: releases
+  repo: markandrus/oxidation-tweek
   skip_cleanup: true
