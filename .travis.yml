@@ -12,13 +12,14 @@ env:
 
 matrix:
   include:
-    # Test
-    - rust: nightly
-      before_install: |
-        set -e
-        rustup target add wasm32-unknown-unknown
-        rustup target add x86_64-unknown-linux-musl
-      script: PATH=binaryen-$BINARYEN/bin:$PATH TARGET=x86_64-unknown-linux-musl make test
+    # NOTE(mroberts): https://github.com/rust-lang/rust/issues/49467
+    # # Test
+    # - rust: nightly
+    #   before_install: |
+    #     set -e
+    #     rustup target add wasm32-unknown-unknown
+    #     rustup target add x86_64-unknown-linux-musl
+    #   script: PATH=binaryen-$BINARYEN/bin:$PATH TARGET=x86_64-unknown-linux-musl make test
 
     # WebAssembly
     - rust: nightly
@@ -58,6 +59,7 @@ before_script:
         cd binaryen-$BINARYEN
         cmake .
         make
+        cd ..
       fi
     else
       cargo install cbindgen
