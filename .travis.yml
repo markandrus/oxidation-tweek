@@ -2,9 +2,10 @@ language: rust
 sudo: false
 
 cache:
-  - $HOME/.cargo
-  - $TRAVIS_BUILD_DIR/rust/target
-  - $TRAVIS_BUILD_DIR/binaryen-$BINARYEN/bin
+  directories:
+    - $HOME/.cargo
+    - $TRAVIS_BUILD_DIR/rust/target
+    - $TRAVIS_BUILD_DIR/binaryen-$BINARYEN/bin
 
 env:
   global:
