@@ -54,7 +54,8 @@ before_script:
     if [ "$BUILD" == release ]; then
       cargo install wasm-gc
 
-      if [ ! -d binaryen-$BINARYEN/bin ]; then
+      if [ ! -f binaryen-$BINARYEN/bin/wasm-opt ]; then
+        rm -rf binaryen-$BINARYEN
         curl -OL https://github.com/WebAssembly/binaryen/archive/$BINARYEN.tar.gz
         tar -xf $BINARYEN.tar.gz
         cd binaryen-$BINARYEN
