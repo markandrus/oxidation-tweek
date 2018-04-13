@@ -67,9 +67,13 @@ RUST_TESTED = .rust-tested
 RUST_TARGET_DIR = rust/target
 
 # Rust C build artifacts
+ifeq ($(TARGET),)
 RUST_C_LIB_DIR = $(RUST_TARGET_DIR)/$(BUILD)
+else
+RUST_C_LIB_DIR = $(RUST_TARGET_DIR)/$(TARGET)/$(BUILD)
+endif
 RUST_C_LIB = $(RUST_C_LIB_DIR)/lib$(NAME).dylib
-RUST_C_HEADER = c/src/rust.h
+RUST_C_HEADER = c/src/$(NAME).h
 
 # Rust WebAssembly build artifacts
 RUST_WASM_LIB_DIR = $(RUST_TARGET_DIR)/wasm32-unknown-unknown/$(BUILD)

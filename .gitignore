@@ -1,7 +1,7 @@
 /.rust-linted
 /.rust-tested
 /build
-/c/src/rust.h
+/c/src/oxidation_tweek.h
 /js/lib
 /main
 /node_modules
