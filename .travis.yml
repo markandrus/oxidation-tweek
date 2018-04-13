@@ -55,7 +55,7 @@ before_script:
 
       if [ ! -d binaryen-$BINARYEN/bin ]; then
         curl -OL https://github.com/WebAssembly/binaryen/archive/$BINARYEN.tar.gz
-        tar -xvf $BINARYEN.tar.gz
+        tar -xf $BINARYEN.tar.gz
         cd binaryen-$BINARYEN
         cmake .
         make

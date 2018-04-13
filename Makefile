@@ -213,7 +213,6 @@ endif
 	$(call echo, "Running wasm-bindgen over Rust WebAssembly library")
 	mkdir -p $(WASM_BINDGEN_OUT_DIR)
 	wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR) --typescript
-	cd $(WASM_BINDGEN_OUT_DIR) && patch -p0 <../../../js/$(NAME)_bg.js.patch
 
 # Optimized wasm-bindgen Library
 # ------------------------------
