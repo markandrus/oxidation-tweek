@@ -4,7 +4,7 @@ sudo: false
 cache:
   - $HOME/.cargo
   - $TRAVIS_BUILD_DIR/rust/target
-  - $TRAVIS_BUILD_DIR/binaryen
+  - $TRAVIS_BUILD_DIR/binaryen-$BINARYEN/bin
 
 env:
   global:
@@ -52,10 +52,13 @@ before_script:
     if [ "$BUILD" == release ]; then
       cargo install wasm-gc
 
-      curl -OL https://github.com/WebAssembly/binaryen/archive/$BINARYEN.tar.gz
-      tar -xvf $BINARYEN.tar.gz
-      cd binaryen-$BINARYEN
-      cmake . && make
+      if [ ! -d binaryen-$BINARYEN/bin ]; then
+        curl -OL https://github.com/WebAssembly/binaryen/archive/$BINARYEN.tar.gz
+        tar -xvf $BINARYEN.tar.gz
+        cd binaryen-$BINARYEN
+        cmake .
+        make
+      fi
     else
       cargo install cbindgen
     fi
