@@ -1,6 +1,8 @@
 oxidation-tweek
 ===============
 
+[![Build Status](https://travis-ci.org/markandrus/oxidation-tweek.svg?branch=master)](https://travis-ci.org/markandrus/oxidation-tweek)
+
 This Tweek\* project explores potential code-sharing between Twilio's C++ and
 JavaScript Video SDKs using Rust, [cbindgen](https://github.com/eqrion/cbindgen),
 and [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen). rustc lets us
@@ -13,6 +15,22 @@ that require duplicating Rust source in some cases; however, at a high-level, we
 _should_ find a way to re-use code, if not in this particular way.
 
 \* "Tweek" is the name of [Twilio's internal hack week](https://venturebeat.com/2016/07/24/inside-the-hackathon-that-keeps-twilio-innovating/).
+
+Status
+------
+
+For now, this project reimplements SDP functionality from
+
+* [lib/util/sdp/index.js](https://github.com/twilio/twilio-video.js/blob/1.8.0/lib/util/sdp/index.js), and
+* [src/media/sdp_utils.cpp](https://github.com/twilio/video-cpp/blob/f83ff580baee7e80070c0e617cd231e636630a3e/src/media/sdp_utils.cpp),
+
+mainly because the types of these functions are typically string → string and
+easy to provide bindings to; however, in the future, as cbindgen and
+wasm-bindgen mature, we may want to reimplement logic for other tasks, too (like
+producing and consuming signaling messages).
+
+We won't ship any SDKs using oxidation-tweek; however, I have a proof-of-concept
+PR open against [twilio/video-cpp](https://github.com/twilio/video-cpp).
 
 Installation
 ------------

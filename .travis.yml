@@ -89,7 +89,7 @@ before_deploy:
   if [ "$TARGET" == wasm32-unknown-unknown ]; then
     cp -R build/release/js/* $name/
   else
-    cp target/$TARGET/release/liboxidation_tweek.a $name/
+    cp rust/target/$TARGET/release/liboxidation_tweek.a $name/
     cp README.md c/src/oxidation_tweek.h $name/
   fi
 

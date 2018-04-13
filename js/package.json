@@ -1,0 +1,28 @@
+{
+  "name": "oxidation-tweek",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Rust code that could possibly be shared between C++ and JavaScript SDKs",
+  "main": "lib/oxidation_tweek.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markandrus/oxidation-tweek.git"
+  },
+  "keywords": [
+    "Rust",
+    "C",
+    "C++",
+    "JavaScript",
+    "WebAssembly",
+    "wasm"
+  ],
+  "author": "Mark Andrus Roberts <mroberts@twilio.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/markandrus/oxidation-tweek/issues"
+  },
+  "homepage": "https://github.com/markandrus/oxidation-tweek#readme"
+}

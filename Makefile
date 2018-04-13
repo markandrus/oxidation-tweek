@@ -30,7 +30,8 @@ C_OUT_MAIN = $(C_OUT_DIR)/main
 
 # JavaScript and WebAssembly build artifacts
 JS_OUT_DIR = $(OUT_DIR)/js
-JS_OUT_MAIN = $(JS_OUT_DIR)/main
+JS_OUT_MAIN = $(JS_OUT_DIR)/index.js
+JS_OUT_PACKAGE_JSON = $(JS_OUT_DIR)/package.json
 JS_OUT_LIB_DIR = $(JS_OUT_DIR)/lib
 JS_OUT_LIB_JS = $(JS_OUT_LIB_DIR)/$(NAME).js
 JS_OUT_LIB_JS_BG = $(JS_OUT_LIB_DIR)/$(NAME)_bg.js
@@ -131,8 +132,12 @@ $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB) $(RUST_C_HEADER) rust/cbindgen.toml
 # JavaScript Test Application
 # ---------------------------
 
-$(JS_OUT_MAIN): js/index.js $(JS_OUT_LIB_JS) $(JS_OUT_LIB_JS_BG) $(JS_OUT_LIB_WASM_BG)
+$(JS_OUT_MAIN): js/index.js $(JS_OUT_PACKAGE_JSON) $(JS_OUT_LIB_JS) $(JS_OUT_LIB_JS_BG) $(JS_OUT_LIB_WASM_BG)
 	$(call echo, "Building JavaScript test application")
+	mkdir -p $(JS_OUT_DIR)
+	cp $< $@
+
+$(JS_OUT_PACKAGE_JSON): js/package.json
 	mkdir -p $(JS_OUT_DIR)
 	cp $< $@
 
