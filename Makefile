@@ -101,7 +101,7 @@ help:
 
 lint-rust:  ## Lint the Rust source (runs Clippy)
 	$(call echo, "Linting Rust source")
-	cd rust && cargo +nightly clippy
+	cd rust && cargo +nightly clippy $(CARGO_TARGET) $(CARGO_FLAGS)
 
 release: ## Build and test everything (release mode)
 	$(MAKE) BUILD=$@ all
@@ -118,7 +118,7 @@ test-js: $(JS_OUT_MAIN) ## Run the JavaScript test application (defaults to debu
 
 test-rust: ## Run the Rust unit tests
 	$(call echo, "Running Rust unit tests")
-	cd rust && cargo test
+	cd rust && cargo test $(CARGO_TARGET) $(CARGO_FLAGS)
 
 # C Test Application
 # ------------------
@@ -212,7 +212,7 @@ $(WASM_BINDGEN_OUT_JS): $(WASM_OPT_OUT_LIB)
 endif
 	$(call echo, "Running wasm-bindgen over Rust WebAssembly library")
 	mkdir -p $(WASM_BINDGEN_OUT_DIR)
-	wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR)
+	wasm-bindgen $< --nodejs --out-dir $(WASM_BINDGEN_OUT_DIR) --typescript
 	cd $(WASM_BINDGEN_OUT_DIR) && patch -p0 <../../../js/$(NAME)_bg.js.patch
 
 # Optimized wasm-bindgen Library
