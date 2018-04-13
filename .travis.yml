@@ -4,6 +4,7 @@ sudo: false
 cache:
   - $HOME/.cargo
   - $TRAVIS_BUILD_DIR/rust/target
+  - $TRAVIS_BUILD_DIR/binaryen
 
 env:
   global:
@@ -17,13 +18,13 @@ matrix:
         set -e
         rustup target add wasm32-unknown-unknown
         rustup target add x86_64-unknown-linux-musl
-      script: PATH=binaryen-$BINARYEN:$PATH TARGET=x86_64-unknown-linux-musl make test
+      script: PATH=binaryen-$BINARYEN/bin:$PATH TARGET=x86_64-unknown-linux-musl make test
 
     # WebAssembly
     - rust: nightly
       env: BUILD=release TARGET=wasm32-unknown-unknown
       before_install: rustup target add wasm32-unknown-unknown
-      script: PATH=binaryen-$BINARYEN:$PATH make test-js
+      script: PATH=binaryen-$BINARYEN/bin:$PATH make test-js
 
     # Linux
     - rust: nightly
@@ -51,8 +52,10 @@ before_script:
     if [ "$BUILD" == release ]; then
       cargo install wasm-gc
 
-      curl -OL https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN/binaryen-$BINARYEN-x86_64-linux.tar.gz
-      tar -xvf binaryen-*.tar.gz
+      curl -OL https://github.com/WebAssembly/binaryen/archive/$BINARYEN.tar.gz
+      tar -xvf $BINARYEN.tar.gz
+      cd binaryen-$BINARYEN
+      cmake . && make
     else
       cargo install cbindgen
     fi
