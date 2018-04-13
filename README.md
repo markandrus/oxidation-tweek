@@ -1,5 +1,7 @@
-rust-c-js
-=========
+oxidation-tweek
+===============
+
+_Rust code that could possibly be shared between C++ and JavaScript SDKs_
 
 Here is a little toy project showing how to compile Rust code that can be called
 from C or JavaScript (via WebAssembly). To set this project up, I used
@@ -12,7 +14,7 @@ Installation
 
 ### Requirements
 
-* Cargo
+* Cargo (and Clippy)
 * cbindgen
 * gcc
 * make
@@ -24,11 +26,9 @@ Installation
 
 ### Usage
 
-Run `make all` to build and run both the C and JavaScript test applications. You
-should see each print
-
-> Hello, World!
-> Bye!
+Run `make all` to build and run both the C and JavaScript test applications.
+These need to be updated to actually demonstrate what they're doing. `make help`
+will show some other commands you can run.
 
 #### Release Mode
 
