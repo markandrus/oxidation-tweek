@@ -1,7 +1,13 @@
 extern crate regex;
 
-use regex::Regex;
+cfg_if! {
+    if #[cfg(target_arch = "wasm32")] {
+        extern crate wasm_bindgen;
+        use wasm_bindgen::prelude::*;
+    }
+}
 
+use regex::Regex;
 use std::collections::BTreeMap;
 use std::fmt;
 
@@ -24,8 +30,16 @@ type MediaSection = Section;
 /// "b=TIAS" values in bps to "b=AS" values in kbps.
 const RTCP_BITRATE: u16 = 16000;
 
-#[allow(dead_code)]
-enum Modifier {
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+pub enum Modifier {
+    As,
+    Tias
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+#[repr(C)]
+pub enum Modifier {
     As,
     Tias
 }
@@ -62,7 +76,7 @@ fn create_b_line(modifier: &Modifier, max_bitrate: u16) -> String {
 /// * `section` - An m= section
 ///
 #[allow(dead_code)]
-pub fn create_codec_map_for_media_section(section: &str) -> BTreeMap<Codec, Vec<PT>> {
+fn create_codec_map_for_media_section(section: &str) -> BTreeMap<Codec, Vec<PT>> {
     create_pt_to_codec_name(section).iter().fold(BTreeMap::new(), |mut codec_map, (pt, codec)| {
         codec_map
             .entry(codec.to_string())
@@ -209,7 +223,7 @@ fn set_bitrate_in_media_section(modifier: &Modifier, bitrate: u16, section: &str
 /// * `max_audio_bitrate` - The optional max audio bitrate in bps
 /// * `max_video_bitrate` - The optional max video bitrate in bps
 ///
-fn set_bitrate_parameters(sdp: &mut SDP, modifier: &Modifier, max_audio_bitrate: Option<u16>, max_video_bitrate: Option<u16>) -> SDP {
+pub fn set_bitrate_parameters(sdp: &mut SDP, modifier: &Modifier, max_audio_bitrate: Option<u16>, max_video_bitrate: Option<u16>) -> SDP {
     let (session, mut media_sections) = get_media_sections(sdp, None, None);
     media_sections = media_sections.iter().map(|section| {
         let kind = if section.starts_with("m=audio") {
@@ -238,11 +252,6 @@ fn set_bitrate_parameters(sdp: &mut SDP, modifier: &Modifier, max_audio_bitrate:
         })
     }).collect();
     format!("{}\r\n{}\r\n", session, media_sections.join("\r\n"))
-}
-
-pub fn do_greet(name: &str) -> String {
-    // format!("Hello, {}!\nBye!", name)
-    set_bitrate_parameters(&mut name.to_string(), &Modifier::Tias, Some(100), Some(200))
 }
 
 #[cfg(test)]

@@ -51,12 +51,20 @@ type OutStr = *mut c_char;
 
 #[cfg(not(target_arch = "wasm32"))]
 #[no_mangle]
-pub extern "C" fn greet(name: InStr) -> OutStr {
-    to_out_str(util::do_greet(&from_in_str(name)))
+pub extern "C" fn set_bitrate_parameters(sdp: InStr, modifier: util::Modifier) -> OutStr {
+    to_out_str(util::set_bitrate_parameters(
+            &mut from_in_str(sdp),
+            &modifier,
+            None,
+            None))
 }
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub fn greet(name: InStr) -> OutStr {
-    to_out_str(util::do_greet(&from_in_str(name)))
+pub fn set_bitrate_parameters(sdp: InStr, modifier: util::Modifier) -> OutStr {
+    to_out_str(util::set_bitrate_parameters(
+            &mut from_in_str(sdp),
+            &modifier,
+            None,
+            None))
 }

@@ -4,7 +4,7 @@
 #include "src/rust.h"
 
 int main() {
-    char *result = greet("World");
+    char *result = set_bitrate_parameters("World", Tias);
     printf("%s\n", result);
     free(result);
 }
