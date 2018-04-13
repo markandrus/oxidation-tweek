@@ -91,7 +91,7 @@ UGLIFYJS = ./node_modules/.bin/uglifyjs
 all: test ## Build and test everything (defaults to debug mode)
 
 clean: ## Clean everything (both release and debug artifacts)
-	rm -rf build $(RUST_C_HEADER) $(RUST_LINTED) $(RUST_TESTED) $(RUST_TARGET_DIR)
+	rm -rf build node_modules $(RUST_C_HEADER) $(RUST_LINTED) $(RUST_TESTED) $(RUST_TARGET_DIR)
 
 debug: ## Build and test everything (debug mode)
 	$(MAKE) BUILD=$@ all
@@ -126,7 +126,7 @@ test-rust: ## Run the Rust unit tests
 $(C_OUT_MAIN): c/src/main.c $(RUST_C_LIB) $(RUST_C_HEADER) rust/cbindgen.toml
 	$(call echo, "Building C test application")
 	mkdir -p $(C_OUT_DIR)
-	$(CC) $(CFLAGS) $< -I c -l$(RUST_C_LIB) -o $@
+	$(CC) $(CFLAGS) $< -I c $(RUST_C_LIB) -o $@
 
 # JavaScript Test Application
 # ---------------------------

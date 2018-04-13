@@ -51,20 +51,20 @@ type OutStr = *mut c_char;
 
 #[cfg(not(target_arch = "wasm32"))]
 #[no_mangle]
-pub extern "C" fn set_bitrate_parameters(sdp: InStr, modifier: util::Modifier) -> OutStr {
+pub extern "C" fn set_bitrate_parameters(sdp: InStr, modifier: util::Modifier, max_audio_bitrate: u16, max_video_bitrate: u16) -> OutStr {
     to_out_str(util::set_bitrate_parameters(
             &mut from_in_str(sdp),
             &modifier,
-            None,
-            None))
+            if max_audio_bitrate > 0 { Some(max_audio_bitrate) } else { None },
+            if max_video_bitrate > 0 { Some(max_video_bitrate) } else { None }))
 }
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub fn set_bitrate_parameters(sdp: InStr, modifier: util::Modifier) -> OutStr {
+pub fn set_bitrate_parameters(sdp: InStr, modifier: util::Modifier, max_audio_bitrate: u16, max_video_bitrate: u16) -> OutStr {
     to_out_str(util::set_bitrate_parameters(
             &mut from_in_str(sdp),
             &modifier,
-            None,
-            None))
+            if max_audio_bitrate > 0 { Some(max_audio_bitrate) } else { None },
+            if max_video_bitrate > 0 { Some(max_video_bitrate) } else { None }))
 }

@@ -5,5 +5,7 @@
 /js/lib
 /main
 /node_modules
+/package-lock.json
 /rust/Cargo.lock
 /rust/target
+/yarn.lock
